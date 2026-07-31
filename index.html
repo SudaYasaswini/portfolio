@@ -687,7 +687,7 @@
       </div>
     </div>
     <div class="hero-photo">
-      <img src="profile.jpg" alt="Suda Yasaswini">
+      <img id="profileImg" src="profile.png" alt="Suda Yasaswini">
     </div>
   </div>
   <div class="scroll-hint">↓ scroll</div>
@@ -1063,6 +1063,33 @@
   toTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  // Smart photo fallback: tries common filenames until one loads
+  (function () {
+    const candidates = [
+      'profile.png', 'profile.jpg', 'profile.webp',
+      'Profile.png', 'Profile.jpg',
+      'photo.jpg', 'photo.png',
+      'myphoto.jpg', 'myphoto.png',
+      'my-photo.jpg', 'my-photo.png',
+      'yasaswini.jpg', 'yasaswini.png',
+      'image.jpg', 'image.png'
+    ];
+    const img = document.getElementById('profileImg');
+    let i = 0;
+    function tryNext() {
+      if (i >= candidates.length) return;
+      img.src = candidates[i];
+      i++;
+    }
+    img.addEventListener('error', tryNext);
+    img.addEventListener('load', () => {
+      img.style.opacity = '1';
+    });
+    img.style.opacity = '0';
+    img.style.transition = 'opacity 0.6s ease';
+    tryNext();
+  })();
 </script>
 
 </body>
