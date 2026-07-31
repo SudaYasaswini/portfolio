@@ -107,6 +107,41 @@
     background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
     pointer-events: none;
   }
+  .hero-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+    width: 100%;
+  }
+  .hero-left { flex: 1; }
+  .hero-photo {
+    flex-shrink: 0;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--accent);
+    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.2), 0 0 60px rgba(59, 130, 246, 0.25);
+    position: relative;
+  }
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .hero-photo .photo-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+    color: var(--accent-light);
+    font-size: 80px;
+    font-weight: 800;
+  }
   .hero-greeting { color: var(--accent-light); font-size: 18px; margin-bottom: 12px; }
   .hero h1 {
     font-size: 56px;
@@ -451,10 +486,164 @@
     .edu-grid { grid-template-columns: 1fr; }
     .about-grid { grid-template-columns: 1fr; }
     section, .hero { padding-left: 24px; padding-right: 24px; }
+    .hero-inner { flex-direction: column-reverse; text-align: center; gap: 28px; }
+    .hero-photo { width: 200px; height: 200px; }
+    .hero-desc { margin-left: auto; margin-right: auto; }
+    .hero-buttons, .hero-social { justify-content: center; }
+  }
+
+  /* ============ ANIMATIONS ============ */
+
+  /* Blinking cursor for typing effect */
+  .typing-cursor {
+    display: inline-block;
+    width: 3px;
+    background: var(--accent-light);
+    animation: blink 0.8s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-50px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(50px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+  .reveal-scale { opacity: 0; transform: scale(0.9); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+  /* Floating blobs */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.35;
+    z-index: -1;
+    pointer-events: none;
+    animation: float 12s ease-in-out infinite;
+  }
+  .blob-1 { width: 420px; height: 420px; background: rgba(59, 130, 246, 0.25); top: 12%; left: -120px; }
+  .blob-2 { width: 350px; height: 350px; background: rgba(139, 92, 246, 0.18); bottom: 8%; right: -100px; animation-delay: -4s; }
+  .blob-3 { width: 300px; height: 300px; background: rgba(52, 211, 153, 0.12); top: 55%; left: 55%; animation-delay: -8s; }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+  }
+
+  /* Cursor glow */
+  .cursor-glow {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s;
+  }
+
+  /* Hero photo animations */
+  .hero-photo { animation: photoFloat 5s ease-in-out infinite; }
+  @keyframes photoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Gradient shimmer for h1 */
+  .hero h1 {
+    background: linear-gradient(135deg, #fff, var(--accent-light), #60a5fa, #fff);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 6s ease infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Card hover lift + glow */
+  .project-card, .skill-card, .stat-card, .edu-card {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s, box-shadow 0.3s;
+  }
+  .project-card:hover, .skill-card:hover, .stat-card:hover, .edu-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 50px rgba(59, 130, 246, 0.15);
+  }
+
+  /* Skill tag pulse on hover */
+  .skill-tag { transition: transform 0.2s, background 0.2s; }
+  .skill-tag:hover { transform: scale(1.1); background: rgba(59, 130, 246, 0.25); }
+
+  /* Navbar underline animation */
+  .nav-links a { position: relative; }
+  .nav-links a:not(.nav-cta)::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:not(.nav-cta):hover::after { width: 100%; }
+
+  /* Button shine effect */
+  .btn-primary { position: relative; overflow: hidden; }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+  }
+  .btn-primary:hover::after { left: 150%; }
+
+  /* Timeline pulse */
+  .timeline-item::before { animation: pulse 2.5s ease infinite; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.35); }
+    50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+  }
+
+  /* Scroll progress bar */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    z-index: 1001;
+    transition: width 0.1s;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
+
+<!-- BACKGROUND EFFECTS -->
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
 
 <!-- NAVBAR -->
 <nav>
@@ -474,44 +663,51 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-greeting">👋 Hello, I'm</div>
-  <h1>Suda Yasaswini</h1>
-  <div class="hero-role">Java Full Stack Developer <span>|</span> Spring Boot <span>•</span> React <span>•</span> MongoDB</div>
-  <p class="hero-desc">
-    I build full-stack web applications with Spring Boot microservices and React. Currently working at TCON Solutions, contributing to production systems — from JWT-secured APIs to responsive React dashboards.
-  </p>
-  <div class="hero-buttons">
-    <a href="#projects" class="btn btn-primary">View My Work</a>
-    <a href="#contact" class="btn btn-outline">Get In Touch</a>
-  </div>
-  <div class="hero-social">
-    <a href="https://linkedin.com/in/yasaswinisuda/" target="_blank" rel="noopener">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-      LinkedIn
-    </a>
-    <a href="https://github.com/SudaYasaswini" target="_blank" rel="noopener">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
-      GitHub
-    </a>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-greeting">👋 Hello, I'm</div>
+      <h1>Suda Yasaswini</h1>
+      <div class="hero-role">Java Full Stack Developer <span>|</span> Spring Boot <span>•</span> React <span>•</span> MongoDB</div>
+      <p class="hero-desc">
+        I build full-stack web applications with Spring Boot microservices and React. Currently working at TCON Solutions, contributing to production systems — from JWT-secured APIs to responsive React dashboards.
+      </p>
+      <div class="hero-buttons">
+        <a href="#projects" class="btn btn-primary">View My Work</a>
+        <a href="#contact" class="btn btn-outline">Get In Touch</a>
+      </div>
+      <div class="hero-social">
+        <a href="https://linkedin.com/in/yasaswinisuda/" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/SudaYasaswini" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <img src="profile.jpg" alt="Suda Yasaswini">
+    </div>
   </div>
   <div class="scroll-hint">↓ scroll</div>
 </div>
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat-card"><div class="stat-number">1+</div><div class="stat-label">Year Experience</div></div>
-  <div class="stat-card"><div class="stat-number">4</div><div class="stat-label">Production Projects</div></div>
-  <div class="stat-card"><div class="stat-number">10+</div><div class="stat-label">Microservices Exposure</div></div>
-  <div class="stat-card"><div class="stat-number">30+</div><div class="stat-label">REST APIs Developed</div></div>
+  <div class="stat-card reveal-scale"><div class="stat-number" data-target="1">0</div><div class="stat-label">Year Experience</div></div>
+  <div class="stat-card reveal-scale" style="transition-delay:0.1s"><div class="stat-number" data-target="4">0</div><div class="stat-label">Production Projects</div></div>
+  <div class="stat-card reveal-scale" style="transition-delay:0.2s"><div class="stat-number" data-target="10">0</div><div class="stat-label">Microservices Exposure</div></div>
+  <div class="stat-card reveal-scale" style="transition-delay:0.3s"><div class="stat-number" data-target="30">0</div><div class="stat-label">REST APIs Developed</div></div>
 </div>
 
 <!-- ABOUT -->
 <section id="about">
-  <div class="section-tag">About Me</div>
-  <h2 class="section-title">A quick look at who I am</h2>
-  <p class="section-sub">I'm an early-career developer who enjoys building complete features — from the MongoDB document to the React screen.</p>
+  <div class="section-tag reveal">About Me</div>
+  <h2 class="section-title reveal">A quick look at who I am</h2>
+  <p class="section-sub reveal">I'm an early-career developer who enjoys building complete features — from the MongoDB document to the React screen.</p>
   <div class="about-grid">
-    <div class="about-card">
+    <div class="about-card reveal-left">
       <h3>What I do</h3>
       <ul class="about-list">
         <li><span class="check">✓</span> Build REST APIs with Spring Boot</li>
@@ -522,7 +718,7 @@
         <li><span class="check">✓</span> Debug across UI → API → database layers</li>
       </ul>
     </div>
-    <div class="about-card">
+    <div class="about-card reveal-right">
       <h3>Quick Info</h3>
       <table class="info-table">
         <tr><td>Name</td><td>Suda Yasaswini</td></tr>
@@ -538,11 +734,11 @@
 
 <!-- SKILLS -->
 <section id="skills">
-  <div class="section-tag">Skills</div>
-  <h2 class="section-title">Technologies I work with</h2>
-  <p class="section-sub">Skills built through real production work at TCON Solutions. Items marked yellow are areas I have working exposure to.</p>
+  <div class="section-tag reveal">Skills</div>
+  <h2 class="section-title reveal">Technologies I work with</h2>
+  <p class="section-sub reveal">Skills built through real production work at TCON Solutions. Items marked yellow are areas I have working exposure to.</p>
   <div class="skills-grid">
-    <div class="skill-card">
+    <div class="skill-card reveal-scale">
       <h3>Languages</h3>
       <div class="skill-tags">
         <span class="skill-tag">Java</span>
@@ -550,7 +746,7 @@
         <span class="skill-tag">TypeScript</span>
       </div>
     </div>
-    <div class="skill-card">
+    <div class="skill-card reveal-scale" style="transition-delay:0.15s">
       <h3>Backend</h3>
       <div class="skill-tags">
         <span class="skill-tag">Spring Boot</span>
@@ -560,7 +756,7 @@
         <span class="skill-tag">JWT Authentication</span>
       </div>
     </div>
-    <div class="skill-card">
+    <div class="skill-card reveal-scale" style="transition-delay:0.3s">
       <h3>Frontend</h3>
       <div class="skill-tags">
         <span class="skill-tag">React.js</span>
@@ -570,7 +766,7 @@
         <span class="skill-tag">HTML5</span>
       </div>
     </div>
-    <div class="skill-card">
+    <div class="skill-card reveal-scale" style="transition-delay:0.45s">
       <h3>Database</h3>
       <div class="skill-tags">
         <span class="skill-tag">MongoDB</span>
@@ -578,7 +774,7 @@
         <span class="skill-tag">Embedded Documents</span>
       </div>
     </div>
-    <div class="skill-card">
+    <div class="skill-card reveal-scale" style="transition-delay:0.6s">
       <h3>Tools</h3>
       <div class="skill-tags">
         <span class="skill-tag">Git</span>
@@ -590,7 +786,7 @@
         <span class="skill-tag">MongoDB Compass</span>
       </div>
     </div>
-    <div class="skill-card">
+    <div class="skill-card reveal-scale" style="transition-delay:0.75s">
       <h3>Concepts &amp; Exposure</h3>
       <div class="skill-tags">
         <span class="skill-tag exposure">API Gateway</span>
@@ -605,12 +801,12 @@
 
 <!-- PROJECTS -->
 <section id="projects">
-  <div class="section-tag">Projects</div>
-  <h2 class="section-title">What I've worked on</h2>
-  <p class="section-sub">Production projects built at TCON Solutions — from 8-microservice platforms to full-featured monolithic applications.</p>
+  <div class="section-tag reveal">Projects</div>
+  <h2 class="section-title reveal">What I've worked on</h2>
+  <p class="section-sub reveal">Production projects built at TCON Solutions — from 8-microservice platforms to full-featured monolithic applications.</p>
   <div class="projects-grid">
 
-    <div class="project-card">
+    <div class="project-card reveal-left">
       <div class="project-type">Microservices · 8 Services</div>
       <h3>EduConnect — Tutoring Marketplace</h3>
       <p class="project-desc">An online tutoring platform connecting students, parents, and teachers with live video classes, payments, and real-time chat.</p>
@@ -631,7 +827,7 @@
       </ul>
     </div>
 
-    <div class="project-card">
+    <div class="project-card reveal-right">
       <div class="project-type">Microservices · 8 Services</div>
       <h3>UniFlux — Job Aggregation Platform</h3>
       <p class="project-desc">A platform that aggregates job listings from multiple sources and serves them through searchable, filterable APIs and UI.</p>
@@ -651,7 +847,7 @@
       </ul>
     </div>
 
-    <div class="project-card">
+    <div class="project-card reveal-left">
       <div class="project-type">Monolithic</div>
       <h3>TCON Staffing &amp; Recruitment Platform</h3>
       <p class="project-desc">An employee and vendor management platform for a staffing company — managing placements, profiles, and documents.</p>
@@ -670,7 +866,7 @@
       </ul>
     </div>
 
-    <div class="project-card">
+    <div class="project-card reveal-right">
       <div class="project-type">Monolithic</div>
       <h3>TCON Employee Management System</h3>
       <p class="project-desc">A complete employee management application handling records, validation, and role-based views.</p>
@@ -691,10 +887,10 @@
 
 <!-- EXPERIENCE -->
 <section id="experience">
-  <div class="section-tag">Experience</div>
-  <h2 class="section-title">Where I've worked</h2>
+  <div class="section-tag reveal">Experience</div>
+  <h2 class="section-title reveal">Where I've worked</h2>
   <div class="timeline">
-    <div class="timeline-item">
+    <div class="timeline-item reveal-left">
       <h3>Software Engineer</h3>
       <div class="company">TCON Solutions Pvt. Ltd. — Hyderabad, Telangana</div>
       <div class="date">Aug 2025 – Present</div>
@@ -715,24 +911,24 @@
 
 <!-- EDUCATION -->
 <section id="education">
-  <div class="section-tag">Education</div>
-  <h2 class="section-title">Academic background</h2>
+  <div class="section-tag reveal">Education</div>
+  <h2 class="section-title reveal">Academic background</h2>
   <div class="edu-grid">
-    <div class="edu-card">
+    <div class="edu-card reveal-scale">
       <div class="edu-icon">🎓</div>
       <h3>B.Tech — Computer Science &amp; Engineering</h3>
       <div class="edu-inst">Malla Reddy College of Engineering for Women, Hyderabad</div>
       <div class="edu-score">CGPA: 7.6</div>
       <div class="edu-years">2019 – 2023</div>
     </div>
-    <div class="edu-card">
+    <div class="edu-card reveal-scale" style="transition-delay:0.15s">
       <div class="edu-icon">📘</div>
       <h3>Intermediate (MPC)</h3>
       <div class="edu-inst">MRI Junior College, Hyderabad</div>
       <div class="edu-score">93%</div>
       <div class="edu-years">2017 – 2019</div>
     </div>
-    <div class="edu-card">
+    <div class="edu-card reveal-scale" style="transition-delay:0.3s">
       <div class="edu-icon">🏫</div>
       <h3>SSC</h3>
       <div class="edu-inst">Bala Bharathi Vidyalayam, Tallada</div>
@@ -744,9 +940,9 @@
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-tag">Contact</div>
-  <h2 class="section-title">Let's build something together</h2>
-  <div class="contact-wrap">
+  <div class="section-tag reveal">Contact</div>
+  <h2 class="section-title reveal">Let's build something together</h2>
+  <div class="contact-wrap reveal-scale">
     <h3>Have a role or project for me?</h3>
     <p>I'm actively looking for Java Full Stack Developer opportunities. Let's connect — I usually reply within a day.</p>
     <div class="contact-links">
@@ -765,6 +961,7 @@
 </footer>
 
 <script>
+  // Mobile menu
   function toggleMenu() {
     document.getElementById('navLinks').classList.toggle('open');
   }
@@ -772,6 +969,99 @@
     a.addEventListener('click', () => {
       document.getElementById('navLinks').classList.remove('open');
     });
+  });
+
+  // Scroll reveal (IntersectionObserver)
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+  // Animated counters
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target, 10);
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target / 40));
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          el.textContent = current + '+';
+        }, 40);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+    counterObserver.observe(el);
+  });
+
+  // Scroll progress bar
+  const progressBar = document.getElementById('scrollProgress');
+  window.addEventListener('scroll', () => {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }, { passive: true });
+
+  // Cursor glow
+  const glow = document.getElementById('cursorGlow');
+  let mouseX = -300, mouseY = -300;
+  let glowX = -300, glowY = -300;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  }, { passive: true });
+
+  function animateGlow() {
+    glowX += (mouseX - glowX) * 0.08;
+    glowY += (mouseY - glowY) * 0.08;
+    glow.style.left = glowX + 'px';
+    glow.style.top = glowY + 'px';
+    requestAnimationFrame(animateGlow);
+  }
+  animateGlow();
+
+  // Hide glow on touch devices
+  if (window.matchMedia('(pointer: coarse)').matches) {
+    glow.style.display = 'none';
+  }
+
+  // Back-to-top button
+  const toTop = document.createElement('button');
+  toTop.innerHTML = '↑';
+  toTop.style.cssText = 'position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;font-size:20px;border:none;cursor:pointer;z-index:1000;opacity:0;transform:translateY(10px);transition:all 0.3s;box-shadow:0 8px 24px rgba(59,130,246,0.4);';
+  toTop.onmouseover = () => { toTop.style.background = 'var(--accent-dark)'; };
+  toTop.onmouseout = () => { toTop.style.background = 'var(--accent)'; };
+  document.body.appendChild(toTop);
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) {
+      toTop.style.opacity = '1';
+      toTop.style.transform = 'translateY(0)';
+    } else {
+      toTop.style.opacity = '0';
+      toTop.style.transform = 'translateY(10px)';
+    }
+  }, { passive: true });
+
+  toTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
 
